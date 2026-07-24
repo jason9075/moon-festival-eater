@@ -56,3 +56,7 @@ just dev-tls           # https 伺服器,終端機會印出手機可連的區網
 | 💣 炸彈 | -30 | 慢速,額外扣 3 秒 |
 
 最後 15 秒進入 **Rush Hour**,掉落速度與頻率加倍。
+
+## 授權
+
+[MIT](./LICENSE) © 2026 Jason Kuan ([jason9075](https://github.com/jason9075))
