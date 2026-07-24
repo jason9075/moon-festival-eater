@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#1a1035" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥮</text></svg>"
+    />
+    <title>🥮 中秋大胃王</title>
+    <link rel="stylesheet" href="/src/style.css" />
+    <!-- 零建構:以原生 ESM importmap 從 CDN 載入 MediaPipe,毋須打包工具 -->
+    <script type="importmap">
+      {
+        "imports": {
+          "@mediapipe/tasks-vision": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22-rc.20250304/vision_bundle.mjs"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="stage">
+      <!-- 底層:視訊 (鏡像) -->
+      <video id="webcam" playsinline autoplay muted></video>
+      <!-- 中層+頂層:遊戲繪製 -->
+      <canvas id="game"></canvas>
+
+      <!-- HUD -->
+      <div id="hud" class="hidden">
+        <div class="hud-item">🥮 <span id="score">0</span></div>
+        <div class="hud-item" id="timer-box">⏱ <span id="timer">60</span></div>
+      </div>
+
+      <!-- 倒數大字 -->
+      <div id="countdown" class="hidden"></div>
+
+      <!-- 開始選單 -->
+      <section id="menu" class="screen">
+        <h1>🥮 中秋大胃王</h1>
+        <p class="subtitle">Moon Festival Catch &amp; Eat</p>
+        <ul class="rules">
+          <li>📷 開啟鏡頭,對準你的臉</li>
+          <li>😮 <b>張開嘴巴</b>去接住掉落的美食</li>
+          <li>🥮 月餅 +10 · 🍈 柚子 +20 · 🐇 玉兔 +50(清屏)</li>
+          <li>💣 別吃炸彈!會扣分又扣時間</li>
+        </ul>
+        <button id="start-btn" class="btn primary">開啟鏡頭開始遊戲</button>
+        <p class="hint">需要相機權限,畫面不會上傳、僅在本機運算。</p>
+      </section>
+
+      <!-- 載入中 -->
+      <section id="loading" class="screen hidden">
+        <div class="spinner"></div>
+        <p id="loading-text">正在準備中…</p>
+      </section>
+
+      <!-- 結算 -->
+      <section id="over" class="screen hidden">
+        <h2>時間到!</h2>
+        <div class="final-score">
+          總分 <span id="final-score">0</span>
+        </div>
+        <div id="rank-title"></div>
+        <div id="rank-desc" class="rank-desc"></div>
+        <div class="btn-row">
+          <button id="again-btn" class="btn primary">再玩一次</button>
+          <button id="share-btn" class="btn">📸 儲存截圖</button>
+        </div>
+      </section>
+
+      <!-- 錯誤 -->
+      <section id="error" class="screen hidden">
+        <h2>😢 無法啟動</h2>
+        <p id="error-text"></p>
+        <button id="retry-btn" class="btn primary">重試</button>
+      </section>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

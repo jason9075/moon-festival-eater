@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-labelledby="title desc">
+  <title id="title">廣式月餅</title>
+  <desc id="desc">金黃色俯視月餅，具有波浪壓花邊、中央方形圖案和四角花紋。</desc>
+  <defs>
+    <radialGradient id="cakeGold" cx="36%" cy="28%" r="78%">
+      <stop offset="0" stop-color="#FFE07A"/>
+      <stop offset=".52" stop-color="#F6B833"/>
+      <stop offset="1" stop-color="#D77A12"/>
+    </radialGradient>
+    <linearGradient id="rimGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFD866"/>
+      <stop offset=".55" stop-color="#E99B1D"/>
+      <stop offset="1" stop-color="#B95C0B"/>
+    </linearGradient>
+    <linearGradient id="stampGold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F8BE3E"/>
+      <stop offset="1" stop-color="#D68113"/>
+    </linearGradient>
+  </defs>
+
+  <g stroke="#7A3F12" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M100 17
+      C108 17 113 24 120 25 C128 26 135 20 142 24
+      C149 28 148 37 154 41 C160 45 169 43 174 49
+      C179 55 174 63 177 70 C180 77 188 81 188 89
+      C188 97 180 102 180 110 C180 118 187 124 184 132
+      C181 140 172 140 168 147 C164 154 167 163 161 168
+      C155 173 147 168 140 172 C133 176 130 184 122 185
+      C114 186 108 179 100 180 C92 179 86 186 78 185
+      C70 184 67 176 60 172 C53 168 45 173 39 168
+      C33 163 36 154 32 147 C28 140 19 140 16 132
+      C13 124 20 118 20 110 C20 102 12 97 12 89
+      C12 81 20 77 23 70 C26 63 21 55 26 49
+      C31 43 40 45 46 41 C52 37 51 28 58 24
+      C65 20 72 26 80 25 C87 24 92 17 100 17Z"
+      fill="url(#rimGold)" stroke-width="7"/>
+
+    <circle cx="100" cy="101" r="68" fill="url(#cakeGold)" stroke-width="6"/>
+    <circle cx="100" cy="101" r="57" fill="none" stroke="#C66B0F" stroke-width="4" stroke-dasharray="3 8"/>
+
+    <g fill="none" stroke="#B65D0C" stroke-width="5">
+      <path d="M61 64 C48 63 44 73 51 81 C56 87 66 84 70 75 C73 68 68 63 61 64Z"/>
+      <path d="M139 64 C152 63 156 73 149 81 C144 87 134 84 130 75 C127 68 132 63 139 64Z"/>
+      <path d="M61 138 C48 139 44 129 51 121 C56 115 66 118 70 127 C73 134 68 139 61 138Z"/>
+      <path d="M139 138 C152 139 156 129 149 121 C144 115 134 118 130 127 C127 134 132 139 139 138Z"/>
+      <path d="M55 72 C63 72 69 77 72 84"/>
+      <path d="M145 72 C137 72 131 77 128 84"/>
+      <path d="M55 130 C63 130 69 125 72 118"/>
+      <path d="M145 130 C137 130 131 125 128 118"/>
+    </g>
+
+    <rect x="75" y="76" width="50" height="50" rx="9" fill="url(#stampGold)" stroke="#A9520A" stroke-width="5" transform="rotate(45 100 101)"/>
+    <path d="M86 88 H114 V114 H86Z" fill="none" stroke="#9F4B08" stroke-width="5"/>
+    <path d="M93 95 L100 91 L107 95 V107 L100 111 L93 107Z" fill="#F7C34C" stroke="#9F4B08" stroke-width="4"/>
+
+    <path d="M49 49 C66 32 92 27 112 32" fill="none" stroke="#FFF0A5" stroke-width="7" opacity=".72"/>
+    <path d="M44 57 C48 53 52 49 57 46" fill="none" stroke="#FFF8C7" stroke-width="4" opacity=".9"/>
+  </g>
+</svg>

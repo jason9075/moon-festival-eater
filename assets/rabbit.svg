@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-labelledby="title desc">
+  <title id="title">可愛玉兔</title>
+  <desc id="desc">白色圓潤玉兔，長耳朵、粉紅內耳和腮紅、大眼睛，呈療癒坐姿。</desc>
+  <defs>
+    <linearGradient id="bunnyWhite" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset=".62" stop-color="#F2F4FA"/>
+      <stop offset="1" stop-color="#C9D0DE"/>
+    </linearGradient>
+    <linearGradient id="earPink" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFB6CE"/>
+      <stop offset="1" stop-color="#F37FA9"/>
+    </linearGradient>
+    <radialGradient id="cheekPink" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#FF8FB5" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#FF8FB5" stop-opacity=".15"/>
+    </radialGradient>
+    <linearGradient id="eyeShine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#454B65"/>
+      <stop offset="1" stop-color="#171B31"/>
+    </linearGradient>
+  </defs>
+
+  <g stroke="#626A7D" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M62 78 C48 61 43 31 56 18 C70 12 81 49 79 72Z"
+      fill="url(#bunnyWhite)" stroke-width="7"/>
+    <path d="M121 72 C119 45 131 13 145 18 C158 31 152 61 138 78Z"
+      fill="url(#bunnyWhite)" stroke-width="7"/>
+    <path d="M61 61 C56 49 55 33 60 28 C67 30 72 49 72 63Z"
+      fill="url(#earPink)" stroke="#E980A5" stroke-width="4"/>
+    <path d="M128 63 C128 49 133 30 140 28 C145 33 144 49 139 61Z"
+      fill="url(#earPink)" stroke="#E980A5" stroke-width="4"/>
+
+    <ellipse cx="100" cy="143" rx="53" ry="43" fill="url(#bunnyWhite)" stroke-width="8"/>
+    <ellipse cx="55" cy="156" rx="17" ry="27" fill="url(#bunnyWhite)" stroke-width="7" transform="rotate(18 55 156)"/>
+    <ellipse cx="145" cy="156" rx="17" ry="27" fill="url(#bunnyWhite)" stroke-width="7" transform="rotate(-18 145 156)"/>
+    <ellipse cx="71" cy="178" rx="28" ry="12" fill="url(#bunnyWhite)" stroke-width="7"/>
+    <ellipse cx="129" cy="178" rx="28" ry="12" fill="url(#bunnyWhite)" stroke-width="7"/>
+
+    <ellipse cx="100" cy="100" rx="58" ry="49" fill="url(#bunnyWhite)" stroke-width="8"/>
+
+    <g fill="url(#eyeShine)" stroke="#282D43" stroke-width="4">
+      <ellipse cx="76" cy="96" rx="10" ry="13"/>
+      <ellipse cx="124" cy="96" rx="10" ry="13"/>
+    </g>
+    <g fill="#FFFFFF" stroke="none">
+      <circle cx="73" cy="91" r="3.5"/>
+      <circle cx="121" cy="91" r="3.5"/>
+    </g>
+
+    <ellipse cx="64" cy="119" rx="15" ry="9" fill="url(#cheekPink)" stroke="none"/>
+    <ellipse cx="136" cy="119" rx="15" ry="9" fill="url(#cheekPink)" stroke="none"/>
+    <path d="M94 110 Q100 105 106 110 Q100 118 94 110Z" fill="#F07B9F" stroke="#9F526D" stroke-width="3"/>
+    <path d="M100 117 C96 124 88 122 87 118 M100 117 C104 124 112 122 113 118"
+      fill="none" stroke="#626A7D" stroke-width="3.5"/>
+
+    <path d="M56 79 C64 66 76 59 88 57" fill="none" stroke="#FFFFFF" stroke-width="6" opacity=".9"/>
+    <path d="M65 146 C74 136 84 133 91 133" fill="none" stroke="#FFFFFF" stroke-width="6" opacity=".72"/>
+  </g>
+</svg>

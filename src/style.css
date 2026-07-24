@@ -1,0 +1,243 @@
+:root {
+  --bg: #1a1035;
+  --gold: #ffd24a;
+  --gold-soft: #ffe08a;
+  --ink: #2a1a4a;
+  --panel: rgba(26, 16, 53, 0.82);
+  --danger: #ff6b6b;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: #fff;
+  font-family: system-ui, 'PingFang TC', 'Noto Sans TC', sans-serif;
+  overscroll-behavior: none;
+}
+
+/* 舞台:置中的直式遊戲區,填滿視窗但維持可用比例 */
+#stage {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 30%, #2c1b52, #140c2b 70%);
+}
+
+#webcam,
+#game {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 鏡像視訊,符合直覺操作 */
+#webcam {
+  transform: scaleX(-1);
+}
+
+#game {
+  z-index: 2;
+}
+
+/* ---- HUD ---- */
+#hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  padding: calc(env(safe-area-inset-top) + 14px) 18px 0;
+  font-size: clamp(20px, 6vw, 30px);
+  font-weight: 800;
+  pointer-events: none;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.hud-item {
+  background: var(--panel);
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 210, 74, 0.5);
+}
+
+#timer-box.warning {
+  color: var(--danger);
+  border-color: var(--danger);
+  animation: pulse 0.5s infinite alternate;
+}
+
+@keyframes pulse {
+  to {
+    transform: scale(1.12);
+  }
+}
+
+/* ---- 倒數大字 ---- */
+#countdown {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(80px, 30vw, 220px);
+  font-weight: 900;
+  color: var(--gold);
+  text-shadow: 0 6px 30px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+}
+
+.count-anim {
+  animation: pop 0.6s ease-out;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  40% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+}
+
+/* ---- 全螢幕面板 ---- */
+.screen {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 28px;
+  text-align: center;
+  background: var(--panel);
+  backdrop-filter: blur(6px);
+}
+
+h1 {
+  font-size: clamp(34px, 11vw, 64px);
+  color: var(--gold);
+  text-shadow: 0 4px 20px rgba(255, 180, 40, 0.4);
+}
+
+.subtitle {
+  font-size: clamp(13px, 4vw, 18px);
+  letter-spacing: 2px;
+  opacity: 0.7;
+  margin-top: -8px;
+}
+
+h2 {
+  font-size: clamp(28px, 8vw, 44px);
+  color: var(--gold-soft);
+}
+
+.rules {
+  list-style: none;
+  text-align: left;
+  line-height: 2;
+  font-size: clamp(14px, 4.2vw, 18px);
+  background: rgba(0, 0, 0, 0.25);
+  padding: 14px 20px;
+  border-radius: 16px;
+  max-width: 420px;
+}
+
+.hint {
+  font-size: 12px;
+  opacity: 0.6;
+  max-width: 320px;
+}
+
+/* ---- 按鈕 ---- */
+.btn {
+  font: inherit;
+  font-weight: 700;
+  font-size: clamp(16px, 4.6vw, 20px);
+  color: var(--ink);
+  background: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 14px 28px;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, var(--gold), #ff9a3c);
+  box-shadow: 0 6px 20px rgba(255, 150, 40, 0.45);
+}
+
+.btn-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ---- 結算 ---- */
+.final-score {
+  font-size: clamp(20px, 6vw, 28px);
+}
+
+.final-score span {
+  font-size: clamp(48px, 16vw, 90px);
+  font-weight: 900;
+  color: var(--gold);
+  display: block;
+}
+
+#rank-title {
+  font-size: clamp(24px, 7vw, 36px);
+  font-weight: 800;
+}
+
+.rank-desc {
+  opacity: 0.8;
+}
+
+/* ---- 載入動畫 ---- */
+.spinner {
+  width: 52px;
+  height: 52px;
+  border: 5px solid rgba(255, 210, 74, 0.25);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hidden {
+  display: none !important;
+}

@@ -1,0 +1,184 @@
+# 🥮 中秋大胃王：Moon Festival Catch & Eat — 開發指南
+
+## 1. 遊戲核心概念 (Game Overview)
+
+* **遊戲名稱**：中秋大胃王 (Moon Festival Catch & Eat)
+* **遊戲類型**：WebCam 視訊互動 / 臉部偵測體感遊戲
+* **核心玩法**：玩家開啟視訊鏡頭，畫面上方會隨機掉落「月餅」與「柚子」。玩家需要張開嘴巴移動到對應位置「吃」掉食材獲取分數。
+* **技術棧建議**：HTML5 Canvas + Vanilla JS (或 React/Vue) + **MediaPipe Face Landmarker** (`@mediapipe/tasks-vision`)。
+
+---
+
+## 2. 視覺與物理邏輯 (Visuals & Mechanics)
+
+### 2.1 畫面圖層結構 (Canvas Layers)
+
+1. **底層 (Video Stream)**：視訊鏡頭畫面（建議做鏡像翻轉 `transform: scaleX(-1)`，符合直覺操作）。
+2. **中層 (Game Entities)**：掉落物（月餅、柚子、炸彈/毒蘑菇）、分數與計時器 UI。
+3. **頂層 (Landmark Overlay)**：嘴巴位置標示（例如在嘴巴畫一個可愛的判定圈或吃東西的效果特效）。
+
+### 2.2 掉落物規格 (Entities)
+
+| 物件 | 出現機率 | 掉落速度 | 得分/效果 | 視覺設計 |
+| --- | --- | --- | --- | --- |
+| **月餅 (Mooncake)** | 50% | 中速 | +10 分 | 傳統金黃色花紋月餅 |
+| **柚子 (Pomelo)** | 35% | 快速 | +20 分 | 綠色大柚子 / 剝皮柚子 |
+| **玉兔 (Jade Rabbit)** | 10% | 極快 (Bonus) | +50 分 / 清屏 | 可愛兔子 |
+| **烤肉醬/炸彈 (Bomb)** | 5% | 慢速 | -30 分 / 扣時間 | 冒煙的炸彈或辣醬 |
+
+---
+
+## 3. 臉部偵測與碰撞邏輯 (Face Landmark Logic)
+
+### 3.1 嘴巴關鍵點與張嘴判定
+
+MediaPipe Face Mesh 提供 468 個 3D 臉部特徵點，關注嘴唇周圍的核心 Keypoints：
+
+* **上唇中心**：Point `13`
+* **下唇中心**：Point `14`
+* **左嘴角**：Point `61`
+* **右嘴角**：Point `291`
+
+```javascript
+// 計算張嘴程度 (Vertical Distance / Horizontal Distance)
+function isMouthOpen(landmarks) {
+  const topLip = landmarks[13];
+  const bottomLip = landmarks[14];
+  const leftCorner = landmarks[61];
+  const rightCorner = landmarks[291];
+
+  const verticalDist = Math.hypot(topLip.x - bottomLip.x, topLip.y - bottomLip.y);
+  const horizontalDist = Math.hypot(leftCorner.x - rightCorner.x, leftCorner.y - rightCorner.y);
+
+  // 當上下唇距離 / 左右嘴角距離 > 閾值時判定為張嘴
+  const mouthRatio = verticalDist / horizontalDist;
+  return mouthRatio > 0.35; // 閾值可根據測試調整
+}
+
+```
+
+### 3.2 碰撞檢測 (Collision Detection)
+
+* **嘴巴中心點 ($C_{mouth}$)**：取 Point 13 與 Point 14 的中點。
+* **碰撞條件**：
+1. 玩家**必須處於張嘴狀態** (`isMouthOpen === true`)。
+2. 掉落物中心與嘴巴中心點距離小於判定半徑：
+
+$$\text{Distance}(P_{item}, C_{mouth}) < R_{item} + R_{mouth}$$
+
+
+
+
+
+---
+
+## 4. 遊戲流程與架構 (Game Loop & Flow)
+
+```
+[ Ready Screen ] -> [ WebCam Permission ] -> [ 3-2-1 Countdown ]
+                                                    │
+                                                    ▼
+[ GameOver Screen ] <── ( Time <= 0s ) ─── [ Game Loop (60s) ]
+
+```
+
+1. **準備階段 (Start Menu)**：
+* 標題「中秋大胃王」、按鈕「開啟鏡頭開始遊戲」。
+* 提示視訊權限說明與遊戲玩法提示（如：「張開嘴巴把月餅吃掉！」）。
+
+
+2. **遊戲階段 (Game Phase - 60 秒)**：
+* **`requestAnimationFrame` 主迴圈**：
+1. 擷取最新 Video Frame 並送入 MediaPipe 取得 Landmark。
+2. 更新所有掉落物位置（$Y = Y + \text{speed}$）。
+3. 檢查嘴巴狀態與碰撞判定。
+4. 若觸發吃掉：播放音效、顯示得分飄字動畫 (+10)、觸發粒子效果，並移除該掉落物。
+5. 渲染 Canvas（影像 + 掉落物 + UI）。
+
+
+
+
+3. **結算階段 (Game Over)**：
+* 顯示最終得分與等級評等（例如：0~100分「嫦娥笑你」、300分以上「中秋大胃王」）。
+* 提供再玩一次 (Play Again) 與截圖分享功能。
+
+
+
+---
+
+## 5. 關鍵代碼實作範例 (Core Implementation Guide)
+
+以下為使用 **MediaPipe Tasks Vision** 的 JavaScript 核心邏輯結構：
+
+```javascript
+import { FaceLandmarker, FilesetResolver } from "@mediapipe/tasks-vision";
+
+let faceLandmarker;
+let video = document.getElementById("webcam");
+let canvas = document.getElementById("output_canvas");
+let ctx = canvas.getContext("2d");
+
+// 1. 初始化 MediaPipe Face Landmarker
+async function initMediaPipe() {
+  const filesetResolver = await FilesetResolver.forVisionTasks(
+    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+  );
+  faceLandmarker = await FaceLandmarker.createFromOptions(filesetResolver, {
+    baseOptions: {
+      modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
+      delegate: "GPU"
+    },
+    runningMode: "VIDEO",
+    numFaces: 1
+  });
+}
+
+// 2. 遊戲主迴圈
+function gameLoop() {
+  let startTimeMs = performance.now();
+  
+  // 檢測臉部
+  if (video.currentTime !== lastVideoTime) {
+    lastVideoTime = video.currentTime;
+    const results = faceLandmarker.detectForVideo(video, startTimeMs);
+    
+    if (results.faceLandmarks.length > 0) {
+      const landmarks = results.faceLandmarks[0];
+      
+      // 取得嘴巴座標 (MediaPipe 傳回 0~1 的正規化座標，需乘以 Canvas 寬高)
+      const mouthX = (1 - (landmarks[13].x + landmarks[14].x) / 2) * canvas.width; // 考量鏡像翻轉
+      const mouthY = ((landmarks[13].y + landmarks[14].y) / 2) * canvas.height;
+      const mouthOpen = isMouthOpen(landmarks);
+
+      // 進行遊戲物品物理更新與碰撞檢測
+      updateItemsAndCheckCollision(mouthX, mouthY, mouthOpen);
+    }
+  }
+
+  renderCanvas();
+  requestAnimationFrame(gameLoop);
+}
+
+```
+
+---
+
+## 6. 優化與細節調整 (UX & Performance)
+
+1. **座標鏡像處理 (Mirroring)**：
+* 視訊鏡頭必須做水平翻轉，否則玩家往左移頭，畫面上的嘴巴會往右移，體驗非常彆扭。計算 $X$ 座標時要用 $(1 - x)$ 處理。
+
+
+2. **張嘴反饋視覺 (Visual Feedback)**：
+* 當玩家張開嘴巴時，在嘴巴位置繪製一個吃東西的特效（例如「咬一口」的動畫、或是星星粒子），讓玩家確定系統有讀取到張嘴動作。
+
+
+3. **難度曲線 (Difficulty Curve)**：
+* 前 20 秒掉落速度較慢、頻率低。
+* 最後 15 秒進入 **"Rush Hour"**，掉落速度與數量加倍，增加遊戲緊張感。
+
+
+4. **音效設計 (Audio)**：
+* 吃月餅：咔嚓/嚼嚼聲 (`nom-nom.mp3`)。
+* 吃炸彈：爆炸聲或扣分警報聲。
+* 倒數 5 秒：警示嘀嗒聲。

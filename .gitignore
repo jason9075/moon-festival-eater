@@ -1,0 +1,20 @@
+# dependencies
+node_modules/
+bun.lockb
+
+# build output
+dist/
+
+# local certs
+*.pem
+.cert/
+
+# env & secrets
+.env
+.env.*
+.credentials.json
+
+# editor / os
+.direnv/
+.DS_Store
+*.log

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-labelledby="title desc">
+  <title id="title">綠色柚子</title>
+  <desc id="desc">帶蒂頭與葉子的圓潤綠色柚子，果皮有淺色小點與右上高光。</desc>
+  <defs>
+    <radialGradient id="pomeloSkin" cx="34%" cy="25%" r="82%">
+      <stop offset="0" stop-color="#CDEB55"/>
+      <stop offset=".5" stop-color="#83C93F"/>
+      <stop offset="1" stop-color="#3C922F"/>
+    </radialGradient>
+    <linearGradient id="leafGreen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#75D84C"/>
+      <stop offset="1" stop-color="#18843C"/>
+    </linearGradient>
+    <linearGradient id="stemGreen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#65B743"/>
+      <stop offset="1" stop-color="#276E32"/>
+    </linearGradient>
+  </defs>
+
+  <g stroke="#285F2D" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M91 48 C89 38 92 28 100 22 C107 28 110 38 107 49Z"
+      fill="url(#stemGreen)" stroke-width="7"/>
+    <path d="M103 35 C119 17 143 19 155 28 C145 47 124 53 105 43Z"
+      fill="url(#leafGreen)" stroke-width="7"/>
+    <path d="M111 39 C124 34 135 30 146 29" fill="none" stroke="#B7ED72" stroke-width="4"/>
+
+    <path d="M100 42
+      C126 42 151 57 166 81
+      C181 105 178 137 160 158
+      C145 176 124 184 100 184
+      C76 184 55 176 40 158
+      C22 137 19 105 34 81
+      C49 57 74 42 100 42Z"
+      fill="url(#pomeloSkin)" stroke-width="8"/>
+
+    <g fill="#DDF28A" stroke="none" opacity=".78">
+      <circle cx="54" cy="91" r="3"/>
+      <circle cx="70" cy="70" r="2.6"/>
+      <circle cx="91" cy="62" r="2.4"/>
+      <circle cx="47" cy="119" r="2.5"/>
+      <circle cx="67" cy="142" r="3"/>
+      <circle cx="89" cy="159" r="2.3"/>
+      <circle cx="118" cy="151" r="2.8"/>
+      <circle cx="144" cy="132" r="2.5"/>
+      <circle cx="151" cy="104" r="2.8"/>
+      <circle cx="126" cy="84" r="2.2"/>
+      <circle cx="107" cy="116" r="2.5"/>
+      <circle cx="78" cy="107" r="2.2"/>
+    </g>
+
+    <path d="M126 61 C143 69 154 82 157 98" fill="none" stroke="#E9F7A7" stroke-width="10" opacity=".8"/>
+    <path d="M151 109 L151 114" fill="none" stroke="#DDF79A" stroke-width="7" opacity=".65"/>
+  </g>
+</svg>

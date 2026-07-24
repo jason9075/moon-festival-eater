@@ -1,0 +1,11 @@
+{
+  "name": "moon-festival-eater",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "中秋大胃王 — WebCam face-tracking catch & eat game (zero-build, native ESM)",
+  "scripts": {
+    "dev": "node serve.js",
+    "dev:tls": "node serve.js --tls"
+  }
+}
