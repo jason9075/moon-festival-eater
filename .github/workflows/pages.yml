@@ -1,0 +1,32 @@
+name: Deploy to GitHub Pages
+
+# 零建構專案:直接把整個 repo 當靜態站台發佈,無需編譯步驟。
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同時只跑一個部署,取消進行中的舊部署
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: . # 整個 repo 即靜態站台根目錄
+      - id: deployment
+        uses: actions/deploy-pages@v4
