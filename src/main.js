@@ -36,18 +36,59 @@ function loadAssets() {
 
 /**
  * 啟動相機串流並等待影格就緒。
+ * 先以理想約束嘗試 (前鏡頭、720p);若因裝置不符 (OverconstrainedError,
+ * 常見於桌機不回報 facingMode) 則退回最寬鬆的 `{ video: true }`。
  * @returns {Promise<void>}
  */
 async function startCamera() {
-  const stream = await navigator.mediaDevices.getUserMedia({
-    video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
+  // 不安全來源 (非 HTTPS / 非 localhost) 下 mediaDevices 不存在
+  if (!navigator.mediaDevices?.getUserMedia) {
+    throw new DOMException('insecure-context', 'SecurityError');
+  }
+
+  const ideal = {
+    video: { facingMode: { ideal: 'user' }, width: { ideal: 1280 }, height: { ideal: 720 } },
     audio: false,
-  });
+  };
+
+  let stream;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia(ideal);
+  } catch (err) {
+    if (err instanceof DOMException && err.name === 'OverconstrainedError') {
+      stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+    } else {
+      throw err;
+    }
+  }
+
   video.srcObject = stream;
   await video.play();
   // 等待影格尺寸就緒
   if (video.readyState < 2) {
     await new Promise((res) => video.addEventListener('loadeddata', res, { once: true }));
+  }
+}
+
+/**
+ * 將 getUserMedia / 初始化錯誤對應為友善中文訊息。
+ * @param {unknown} err
+ * @returns {string}
+ */
+function describeError(err) {
+  const name = err instanceof DOMException ? err.name : '';
+  switch (name) {
+    case 'NotAllowedError':
+      return '相機權限被拒。請於瀏覽器網址列的權限設定允許相機後重試。';
+    case 'NotFoundError':
+    case 'OverconstrainedError':
+      return '找不到可用的攝影機。請確認裝置已接上相機,且未被其他程式占用。';
+    case 'NotReadableError':
+      return '相機無法讀取,可能正被其他程式 (視訊會議、其他分頁) 占用。請關閉後重試。';
+    case 'SecurityError':
+      return '此頁面非安全來源,無法存取相機。請以 https 或 localhost 開啟 (手機請用 `just dev-tls`)。';
+    default:
+      return err instanceof Error ? err.message : '發生未知錯誤。';
   }
 }
 
@@ -81,13 +122,7 @@ async function play() {
     game?.start();
   } catch (err) {
     console.error(err);
-    const msg =
-      err instanceof DOMException && err.name === 'NotAllowedError'
-        ? '相機權限被拒。請於瀏覽器設定允許相機後重試。'
-        : err instanceof Error
-          ? err.message
-          : '發生未知錯誤。';
-    ui.error(msg);
+    ui.error(describeError(err));
   }
 }
 
